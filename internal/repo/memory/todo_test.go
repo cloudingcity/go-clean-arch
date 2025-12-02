@@ -32,7 +32,7 @@ func (s *todoSuite) TestCreate() {
 		title       string
 		description string
 		setup       func()
-		want        entity.Todo
+		want        *entity.Todo
 		wantErr     error
 	}{
 		{
@@ -44,7 +44,7 @@ func (s *todoSuite) TestCreate() {
 					return time.Unix(123456789, 0)
 				}
 			},
-			want: entity.Todo{
+			want: &entity.Todo{
 				ID:          1,
 				Title:       "title-1",
 				Description: "desc-1",

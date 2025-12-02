@@ -21,7 +21,7 @@ func NewTodoRepo() repo.Todo {
 	}
 }
 
-func (r *todoRepo) Create(title, description string) (entity.Todo, error) {
+func (r *todoRepo) Create(title, description string) (*entity.Todo, error) {
 	now := timeNow()
 	todo := entity.Todo{
 		ID:          r.idCounter,
@@ -33,7 +33,7 @@ func (r *todoRepo) Create(title, description string) (entity.Todo, error) {
 	}
 	r.store = append(r.store, todo)
 	r.idCounter++
-	return todo, nil
+	return &todo, nil
 }
 
 func (r *todoRepo) List() ([]entity.Todo, error) {
