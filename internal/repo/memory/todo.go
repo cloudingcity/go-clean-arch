@@ -34,3 +34,7 @@ func (r *todoRepo) Create(title, description string) (entity.Todo, error) {
 	r.idCounter++
 	return todo, nil
 }
+
+func (r *todoRepo) List() ([]entity.Todo, error) {
+	return r.store, nil
+}
