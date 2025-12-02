@@ -1,4 +1,4 @@
-package ping
+package v1
 
 import (
 	"net/http"
@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestPing(t *testing.T) {
+func TestPingRoutes(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.Default()
-	NewRoutes(r.Group("v1"))
+	NewPingRoutes(r.Group("v1"))
 
 	w := httptest.NewRecorder()
 	req := httptest.NewRequest(http.MethodGet, "/v1/ping", nil)

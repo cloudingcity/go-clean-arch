@@ -1,4 +1,4 @@
-package ping
+package v1
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRoutes(rg *gin.RouterGroup) {
+func NewPingRoutes(rg *gin.RouterGroup) {
 	rg.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
