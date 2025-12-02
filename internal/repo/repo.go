@@ -15,4 +15,5 @@ type Todo interface {
 	List() ([]entity.Todo, error)
 	Get(id int) (*entity.Todo, error)
 	Update(id int, input entity.UpdateTodoInput) error
+	Delete(id int) error
 }

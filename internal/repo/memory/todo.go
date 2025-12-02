@@ -44,7 +44,6 @@ func (r *todoRepo) Get(id int) (*entity.Todo, error) {
 	idx := slices.IndexFunc(r.store, func(todo entity.Todo) bool {
 		return todo.ID == id
 	})
-
 	if idx == -1 {
 		return nil, repo.ErrNotFound
 	}
@@ -69,5 +68,18 @@ func (r *todoRepo) Update(id int, input entity.UpdateTodoInput) error {
 		r.store[idx].IsCompleted = *input.IsCompleted
 	}
 	r.store[idx].UpdatedAt = timeNow()
+	return nil
+}
+
+func (r *todoRepo) Delete(id int) error {
+	idx := slices.IndexFunc(r.store, func(todo entity.Todo) bool {
+		return todo.ID == id
+	})
+	if idx == -1 {
+		return repo.ErrNotFound
+	}
+
+	r.store = slices.Delete(r.store, idx, idx+1)
+
 	return nil
 }

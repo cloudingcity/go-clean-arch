@@ -223,6 +223,40 @@ func (s *todoSuite) TestUpdate() {
 	}
 }
 
+func (s *todoSuite) TestDelete() {
+	tests := []struct {
+		desc    string
+		id      int
+		setup   func()
+		wantErr error
+	}{
+		{
+			desc: "success",
+			id:   1,
+			setup: func() {
+				timeNow = func() time.Time {
+					return time.Unix(123456789, 0)
+				}
+				_, _ = s.repo.Create("title-1", "desc-1")
+			},
+			wantErr: nil,
+		},
+		{
+			desc:    "not found",
+			id:      1,
+			setup:   func() {},
+			wantErr: repo.ErrNotFound,
+		},
+	}
+	for _, tt := range tests {
+		s.Run(tt.desc, func() {
+			tt.setup()
+			err := s.repo.Delete(tt.id)
+			s.ErrorIs(tt.wantErr, err)
+		})
+	}
+}
+
 func Ptr[T any](v T) *T {
 	return &v
 }
