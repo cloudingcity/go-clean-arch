@@ -10,3 +10,9 @@ type Todo struct {
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
 }
+
+type UpdateTodoInput struct {
+	Title       *string
+	Description *string
+	IsCompleted *bool
+}

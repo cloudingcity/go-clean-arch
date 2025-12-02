@@ -164,3 +164,65 @@ func (s *todoSuite) TestGet() {
 		})
 	}
 }
+
+func (s *todoSuite) TestUpdate() {
+	tests := []struct {
+		desc    string
+		id      int
+		input   entity.UpdateTodoInput
+		setup   func()
+		want    *entity.Todo
+		wantErr error
+	}{
+		{
+			desc: "success",
+			id:   1,
+			input: entity.UpdateTodoInput{
+				Title:       Ptr("title-update"),
+				Description: Ptr("desc-update"),
+				IsCompleted: Ptr(true),
+			},
+			setup: func() {
+				timeNow = func() time.Time {
+					return time.Unix(123456789, 0)
+				}
+				_, _ = s.repo.Create("title-1", "desc-1")
+			},
+			want: &entity.Todo{
+				ID:          1,
+				Title:       "title-update",
+				Description: "desc-update",
+				IsCompleted: true,
+				CreatedAt:   time.Unix(123456789, 0),
+				UpdatedAt:   time.Unix(123456789, 0),
+			},
+			wantErr: nil,
+		},
+		{
+			desc: "not found",
+			id:   1,
+			input: entity.UpdateTodoInput{
+				Title:       Ptr("title-update"),
+				Description: Ptr("desc-update"),
+				IsCompleted: Ptr(true),
+			},
+			setup:   func() {},
+			want:    nil,
+			wantErr: repo.ErrNotFound,
+		},
+	}
+	for _, tt := range tests {
+		s.Run(tt.desc, func() {
+			tt.setup()
+			err := s.repo.Update(tt.id, tt.input)
+			s.ErrorIs(tt.wantErr, err)
+
+			got, _ := s.repo.Get(tt.id)
+			s.Equal(tt.want, got)
+		})
+	}
+}
+
+func Ptr[T any](v T) *T {
+	return &v
+}
