@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"slices"
 	"time"
 
 	"github.com/cloudingcity/todo/internal/entity"
@@ -37,4 +38,16 @@ func (r *todoRepo) Create(title, description string) (entity.Todo, error) {
 
 func (r *todoRepo) List() ([]entity.Todo, error) {
 	return r.store, nil
+}
+
+func (r *todoRepo) Get(id int) (*entity.Todo, error) {
+	idx := slices.IndexFunc(r.store, func(todo entity.Todo) bool {
+		return todo.ID == id
+	})
+
+	if idx == -1 {
+		return nil, repo.ErrNotFound
+	}
+
+	return &r.store[idx], nil
 }

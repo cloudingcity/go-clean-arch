@@ -119,3 +119,48 @@ func (s *todoSuite) TestList() {
 		})
 	}
 }
+
+func (s *todoSuite) TestGet() {
+	tests := []struct {
+		desc    string
+		id      int
+		setup   func()
+		want    *entity.Todo
+		wantErr error
+	}{
+		{
+			desc: "success",
+			id:   1,
+			setup: func() {
+				timeNow = func() time.Time {
+					return time.Unix(123456789, 0)
+				}
+				_, _ = s.repo.Create("title-1", "desc-1")
+			},
+			want: &entity.Todo{
+				ID:          1,
+				Title:       "title-1",
+				Description: "desc-1",
+				IsCompleted: false,
+				CreatedAt:   time.Unix(123456789, 0),
+				UpdatedAt:   time.Unix(123456789, 0),
+			},
+			wantErr: nil,
+		},
+		{
+			desc:    "not found",
+			id:      1,
+			setup:   func() {},
+			want:    nil,
+			wantErr: repo.ErrNotFound,
+		},
+	}
+	for _, tt := range tests {
+		s.Run(tt.desc, func() {
+			tt.setup()
+			got, err := s.repo.Get(tt.id)
+			s.Equal(tt.want, got)
+			s.ErrorIs(tt.wantErr, err)
+		})
+	}
+}
