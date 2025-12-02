@@ -6,6 +6,7 @@ import (
 
 	"github.com/cloudingcity/todo/internal/entity"
 	"github.com/cloudingcity/todo/internal/repo"
+	"github.com/samber/lo"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -178,9 +179,9 @@ func (s *todoSuite) TestUpdate() {
 			desc: "success",
 			id:   1,
 			input: entity.UpdateTodoInput{
-				Title:       Ptr("title-update"),
-				Description: Ptr("desc-update"),
-				IsCompleted: Ptr(true),
+				Title:       lo.ToPtr("title-update"),
+				Description: lo.ToPtr("desc-update"),
+				IsCompleted: lo.ToPtr(true),
 			},
 			setup: func() {
 				timeNow = func() time.Time {
@@ -202,9 +203,9 @@ func (s *todoSuite) TestUpdate() {
 			desc: "not found",
 			id:   1,
 			input: entity.UpdateTodoInput{
-				Title:       Ptr("title-update"),
-				Description: Ptr("desc-update"),
-				IsCompleted: Ptr(true),
+				Title:       lo.ToPtr("title-update"),
+				Description: lo.ToPtr("desc-update"),
+				IsCompleted: lo.ToPtr(true),
 			},
 			setup:   func() {},
 			want:    nil,
@@ -255,8 +256,4 @@ func (s *todoSuite) TestDelete() {
 			s.ErrorIs(tt.wantErr, err)
 		})
 	}
-}
-
-func Ptr[T any](v T) *T {
-	return &v
 }
