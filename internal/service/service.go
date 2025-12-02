@@ -1,4 +1,4 @@
-package repo
+package service
 
 import (
 	"errors"
@@ -10,7 +10,6 @@ var (
 	ErrNotFound = errors.New("not found")
 )
 
-//go:generate mockgen -source=repo.go -destination mocks/repo.go -package mocks
 type Todo interface {
 	Create(title, description string) (*entity.Todo, error)
 	List() ([]entity.Todo, error)
